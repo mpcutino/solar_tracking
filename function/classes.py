@@ -15,8 +15,14 @@ class Interval:
     def get_low(self):
         return self.low
 
+    def copy(self):
+        return type(self)(self.low, self.up)
+
     def __len__(self):
         return self.up - self.low
+    
+    def __str__(self) -> str:
+        return "{0}, {1}".format(self.low, self.up)
 
 
 class Step:
@@ -27,6 +33,12 @@ class Step:
     
     def get_gain(self):
         return self.__get_gain__(self.interval)
+    
+    def crop_end(self, end):
+        self.interval = Interval(self.interval.get_low(), end)
+    
+    def crop_start(self, start):
+        self.interval = Interval(start, self.interval.get_up())
     
     def get_left_gain(self, theta):
         ni = Interval(self.interval.get_low(), theta)
@@ -40,12 +52,18 @@ class Step:
         xs = [self.interval.get_low(), self.interval.get_up()]
         ys = [self.alpha, self.alpha]
         return xs, ys
+    
+    def copy(self):
+        return type(self)(self.interval.copy(), self.alpha)
 
     def __get_gain__(self, interval: Interval)-> int:
         return len(interval)*self.alpha
     
     def __len__(self):
         return len(self.interval)
+    
+    def __str__(self):
+        return "{0}, {1}".format(self.interval, self.alpha)
 
 
 class F:
@@ -66,17 +84,20 @@ class F:
         self.omega = sum([len(s) for s in self.steps])
     
     def get_sub_steps(self, star_idx=0, end_idx=180):
-        return self.steps[star_idx:end_idx]
+        return self.steps[star_idx:end_idx+1]
     
     def get_irradiance(self):
         return sum([s.get_gain() for s in self.steps])
     
-    def plot(self, **plot_kwargs):
+    def plot(self, axis=None, **plot_kwargs):
         xs, ys = zip(*[s.get_xy_plot() for s in self.steps])
 
-        plt.plot(np.ravel(xs), np.ravel(ys), **plot_kwargs)
-        plt.show()
-        plt.close()
+        if axis is None:
+            plt.plot(np.ravel(xs), np.ravel(ys), **plot_kwargs)
+            plt.show()
+            plt.close()
+        else:
+            axis.plot(np.ravel(xs), np.ravel(ys), **plot_kwargs)
     
     def __len__(self):
         return self.omega
