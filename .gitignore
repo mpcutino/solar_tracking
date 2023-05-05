@@ -1,0 +1,7 @@
+# folders
+*__pycache__*
+.vscode
+
+# files
+__internal_main__.py
+__plot*
