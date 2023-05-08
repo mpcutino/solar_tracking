@@ -18,12 +18,14 @@ def max_irradiance_steps(f: F, target_len: int):
     # compute the ending interval for the index starting at the current position
     index2go = []
     current_end = 0
-    for i, l in enumerate(s_lens):
+    for i, s in enumerate(f.steps):
         while (current_end < len(f.steps)):
-            current_len = s_lens[current_end] - s_lens[i] + l
-            if current_len >= target_len:
+            current_len = s_lens[current_end] - s_lens[i] + len(s)
+            if current_len >= target_len and current_end >= i:
                 break
             current_end += 1
+        # get a feasible end value
+        current_end = min(current_end, len(f.steps) - 1)
         index2go.append(current_end)
     
     for i, j in enumerate(index2go):
