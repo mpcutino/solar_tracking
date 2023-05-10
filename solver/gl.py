@@ -13,16 +13,16 @@ def max_irradiance_steps(f: F, target_len: int):
                 # right sweep
     # compute the ending interval for the index starting at the current position
     index2go = get_index2go(f, target_len, from_l2r=True)
-    print(index2go)
+    # print(index2go)
     l2r_max_irr, l2r_max_steps = sweep_intervals(f, index2go, from_l2r=True)
-    print(l2r_max_irr)
+    # print(l2r_max_irr)
 
                 # left sweep
     # compute the starting interval for the index ending at the current position
     index2go = get_index2go(f, target_len, from_l2r=False)
-    print(index2go)
+    # print(index2go)
     r2l_max_irr, r2l_max_steps = sweep_intervals(f, index2go, from_l2r=False)
-    print(r2l_max_irr)
+    # print(r2l_max_irr)
 
     # get the maximum
     max_steps = l2r_max_steps if (l2r_max_irr >= r2l_max_irr) else r2l_max_steps

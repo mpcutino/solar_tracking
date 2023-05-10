@@ -5,3 +5,6 @@
 # files
 __internal_main__.py
 __plot*
+
+# extensions
+*.csv
