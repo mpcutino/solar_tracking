@@ -8,7 +8,7 @@ def get_angle(fn):
     return float(fn[len("position"):].replace(".txt", ""))
 
 
-def loadF_from_folder(data_folder) -> F:
+def loadxy_from_folder(data_folder):
     files = sorted(os.listdir(data_folder), key=lambda fn: get_angle(fn))
     #print(files)
 
@@ -20,4 +20,9 @@ def loadF_from_folder(data_folder) -> F:
         
         xs.append(angle)
         ys.append(total_flux)
+    return xs, ys
+
+
+def loadF_from_folder(data_folder) -> F:
+    xs, ys = loadxy_from_folder(data_folder)
     return F(xs, ys)
